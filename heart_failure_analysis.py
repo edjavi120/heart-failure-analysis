@@ -2,7 +2,7 @@
 
 import marimo
 
-__generated_with = "0.25.1"
+__generated_with = "0.24.2"
 app = marimo.App(width="medium")
 
 
@@ -14,7 +14,8 @@ def _():
     import pandas as pd
     import matplotlib.pyplot as plt
     import seaborn as sns
-    return mo, np, pd, plt, sns
+
+    return mo, pd, plt, sns
 
 
 @app.cell
@@ -22,7 +23,7 @@ def _(mo):
     mo.md(r"""
     # Heart Failure: Ejection Fraction and Kidney Function
 
-    **Group members:** Edgar Ocasio-Arce, NAME 2, NAME 3
+    **Group members:** Edgar Ocasio-Arce, Cristobal Gonzalez and Robinson D. Willie
 
     **GitHub:** https://github.com/edjavi120/heart-failure-analysis
 
@@ -56,7 +57,7 @@ def _(mo):
 @app.cell
 def _(pd):
     # Load the CSV file into a DataFrame called df and display it.
-    df = pd.read_csv("heart_failure_clinical_records_dataset.csv")
+    df= pd.read_csv("heart_failure_clinical_records_dataset.csv")
     df
     return (df,)
 
@@ -160,17 +161,12 @@ def _(mo):
 
 
 @app.cell
-def _(df):
-    # Filter: keep only the patients with high creatinine.
-    high_creatinine = df[df["serum_creatinine"] > 1.5]
-    high_creatinine
-    return (high_creatinine,)
+def _():
+    return
 
 
 @app.cell
-def _(high_creatinine):
-    # Proportion of high-creatinine patients who died.
-    high_creatinine["DEATH_EVENT"].mean()
+def _():
     return
 
 
@@ -184,9 +180,7 @@ def _(mo):
 
 
 @app.cell
-def _(high_creatinine):
-    # Sort from highest to lowest creatinine and show the relevant columns.
-    high_creatinine.sort_values("serum_creatinine", ascending=False)[["serum_creatinine", "ejection_fraction", "outcome"]]
+def _():
     return
 
 
@@ -200,14 +194,7 @@ def _(mo):
 
 
 @app.cell
-def _(df, plt, sns):
-    # Box plot of creatinine for each outcome.
-    sns.boxplot(data=df, x="outcome", y="serum_creatinine", hue="outcome", order=["Survived", "Died"], hue_order=["Survived", "Died"])
-    plt.title("Serum Creatinine by Outcome")
-    plt.xlabel("Outcome")
-    plt.ylabel("Serum Creatinine (mg/dL)")
-    plt.ylim(0, 10)
-    plt.gca()
+def _():
     return
 
 
@@ -233,19 +220,7 @@ def _(mo):
 
 
 @app.cell
-def _(df, np, plt, sns):
-    # Scatter plot of creatinine vs EF, with a color for each outcome.
-    sns.scatterplot(data=df, x="ejection_fraction", y="serum_creatinine", hue="outcome", hue_order=["Survived", "Died"])
-    plt.axvline(30, color="gray", linestyle="--")
-    plt.axhline(1.5, color="gray", linestyle="--")
-    plt.title("Serum Creatinine vs. Ejection Fraction")
-    plt.xlabel("Ejection Fraction (%)")
-    plt.ylabel("Serum Creatinine (mg/dL)")
-    plt.xlim(10, 80)
-    plt.ylim(0, 10)
-    plt.xticks(np.arange(10, 81, 10))
-    plt.legend(title="Outcome")
-    plt.gca()
+def _():
     return
 
 
@@ -259,24 +234,12 @@ def _(mo):
 
 
 @app.cell
-def _(df):
-    # Group by EF category AND kidney function, then find the proportion who died.
-    df.groupby(["ef_category", "kidney_function"])["DEATH_EVENT"].mean()
+def _():
     return
 
 
 @app.cell
-def _(df, plt, sns):
-    # Bar chart of the proportion who died, split by kidney function.
-    sns.barplot(data=df, x="ef_category", y="DEATH_EVENT", hue="kidney_function",
-                order=["Reduced", "Mid", "Preserved"],
-                hue_order=["Normal creatinine", "High creatinine"], errorbar=None)
-    plt.title("Proportion Who Died by EF Category and Kidney Function")
-    plt.xlabel("Ejection Fraction Category")
-    plt.ylabel("Proportion Who Died")
-    plt.ylim(0, 1)
-    plt.legend(title="Kidney Function")
-    plt.gca()
+def _():
     return
 
 

@@ -1,6 +1,6 @@
 # Heart Failure: Ejection Fraction and Kidney Function
 
-**Group members:** Edgar Ocasio-Arce, NAME 2, NAME 3
+**Group members:** Edgar Ocasio-Arce, Cristobal Gonzalez, Robinson D. Willie
 
 ## What this project is
 This project analyzes the Heart Failure Clinical Records dataset (299 patients) to answer one question:
