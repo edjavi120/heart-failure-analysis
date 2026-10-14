@@ -1,14 +1,3 @@
-# /// script
-# requires-python = ">=3.14"
-# dependencies = [
-#     "marimo>=0.23.3",
-#     "matplotlib>=3.11.2",
-#     "numpy>=2.5.4",
-#     "pandas>=3.0.6",
-#     "seaborn>=0.13.2",
-# ]
-# ///
-
 # GitHub repository: https://github.com/edjavi120/heart-failure-analysis
 
 import marimo
