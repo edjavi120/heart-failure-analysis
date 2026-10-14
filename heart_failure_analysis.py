@@ -1,3 +1,10 @@
+# /// script
+# requires-python = ">=3.14"
+# dependencies = [
+#     "marimo>=0.23.3",
+# ]
+# ///
+
 # GitHub repository: https://github.com/edjavi120/heart-failure-analysis
 
 import marimo
