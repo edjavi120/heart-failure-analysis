@@ -218,7 +218,7 @@ def _(mo):
     mo.md(r"""
     ---
     # Part 3: Putting it together
-    *NAME*
+    *Willie Robinson*
 
     ## Do deaths cluster where EF is low and creatinine is high?
     We make a scatter plot of creatinine against ejection fraction, colored by outcome.
