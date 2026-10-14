@@ -1,8 +1,19 @@
+# /// script
+# requires-python = ">=3.14"
+# dependencies = [
+#     "marimo>=0.23.3",
+#     "matplotlib>=3.11.2",
+#     "numpy>=2.5.4",
+#     "pandas>=3.0.6",
+#     "seaborn>=0.13.2",
+# ]
+# ///
+
 # GitHub repository: https://github.com/edjavi120/heart-failure-analysis
 
 import marimo
 
-__generated_with = "0.24.2"
+__generated_with = "0.25.1"
 app = marimo.App(width="medium")
 
 
@@ -220,7 +231,20 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(df, plt, sns):
+    # Scatter plot of creatinine vs. ejection fraction, colored by outcome,
+    # with lines at our cutoffs to show the four regions patients fall into.
+    plt.figure(figsize=(8, 5))
+    sns.scatterplot(
+        data=df, x="ejection_fraction", y="serum_creatinine",
+        hue="outcome", hue_order=["Survived", "Died"], alpha=0.7,
+    )
+    plt.axvline(30, color="gray", linestyle="--")
+    plt.axhline(1.5, color="gray", linestyle="--")
+    plt.title("Serum Creatinine vs. Ejection Fraction, by Outcome")
+    plt.xlabel("Ejection Fraction (%)")
+    plt.ylabel("Serum Creatinine (mg/dL)")
+    plt.gca()
     return
 
 
@@ -234,12 +258,37 @@ def _(mo):
 
 
 @app.cell
-def _():
-    return
+def _(df):
+    # Group by BOTH EF category and kidney function.
+    death_rates = (
+        df.groupby(["ef_category", "kidney_function"])["DEATH_EVENT"]
+        .agg(patients="count", death_rate="mean")
+        .reset_index()
+    )
+    death_rates
+    return (death_rates,)
 
 
 @app.cell
-def _():
+def _(death_rates, plt, sns):
+    # Grouped bar chart: death rate for each EF category, split by kidney function.
+    # The labels show the rate and the group size (n) so small groups are obvious.
+    _order = ["Reduced", "Mid", "Preserved"]
+    _hues = ["Normal creatinine", "High creatinine"]
+    plt.figure(figsize=(8, 5))
+    _ax = sns.barplot(
+        data=death_rates, x="ef_category", y="death_rate",
+        hue="kidney_function", order=_order, hue_order=_hues,
+    )
+    for _container, _kidney in zip(_ax.containers, _hues):
+        _sub = death_rates[death_rates["kidney_function"] == _kidney].set_index("ef_category").loc[_order]
+        _labels = [f"{r:.0%}\n(n={n})" for r, n in zip(_sub["death_rate"], _sub["patients"])]
+        _ax.bar_label(_container, labels=_labels)
+    _ax.set_ylim(0, 1.15)
+    _ax.set_title("Proportion Who Died by EF Category and Kidney Function")
+    _ax.set_xlabel("Ejection Fraction Category")
+    _ax.set_ylabel("Proportion Who Died")
+    plt.gca()
     return
 
 
