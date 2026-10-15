@@ -9,7 +9,7 @@
 
 import marimo
 
-__generated_with = "0.25.1"
+__generated_with = "0.25.0"
 app = marimo.App(width="medium")
 
 
@@ -107,7 +107,7 @@ def _(mo):
     mo.md(r"""
     ---
     # Part 1: Ejection fraction
-    *NAME*
+    Edgar Ocasio-Arce
 
     ## How is ejection fraction spread out across patients?
     We make a histogram of ejection fraction, with lines marking our cutoffs at 30 and 45.
@@ -159,7 +159,7 @@ def _(mo):
     mo.md(r"""
     ---
     # Part 2: Kidney function
-    *NAME*
+    *Cristobal Gonzalez*
 
     ## How many patients have high creatinine, and how often did they die?
     We filter the dataset to keep only patients with creatinine above 1.5.
@@ -168,12 +168,20 @@ def _(mo):
 
 
 @app.cell
-def _():
-    return
+def _(df):
+    # FILTER: keep only patients with high creatinine (above 1.5).
+    # Why: we want to look at the kidney-risk group on its own before comparing it to everyone else.
+    high_creatinine = df[df["serum_creatinine"] > 1.5]
+    high_creatinine[["serum_creatinine", "ejection_fraction", "outcome"]]
+    return (high_creatinine,)
 
 
 @app.cell
-def _():
+def _(df, high_creatinine):
+    # Compare the proportion who died: high-creatinine patients vs. all patients.
+    # Why: DEATH_EVENT is 1 for died and 0 for survived, so its mean is the proportion who died.
+    print("High creatinine death rate:", round(high_creatinine["DEATH_EVENT"].mean(), 2))
+    print("All patients death rate:", round(df["DEATH_EVENT"].mean(), 2))
     return
 
 
@@ -187,7 +195,12 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(high_creatinine):
+    # SORT: highest creatinine first, showing only the columns relevant to our question.
+    # Why: to see whether the most extreme creatinine values belong to patients who died.
+    high_creatinine.sort_values("serum_creatinine", ascending=False)[
+        ["serum_creatinine", "ejection_fraction", "ef_category", "outcome"]
+    ].head(10)
     return
 
 
@@ -201,7 +214,22 @@ def _(mo):
 
 
 @app.cell
-def _():
+def _(df, plt, sns):
+    # BOXPLOT: creatinine for survivors vs. patients who died.
+    # Why: a boxplot shows the median, spread, and outliers of each group side by side.
+    plt.figure(figsize=(7, 5))
+    sns.boxplot(
+        data=df, x="outcome", y="serum_creatinine",
+        hue="outcome", order=["Survived", "Died"], hue_order=["Survived", "Died"],
+    )
+    plt.axhline(1.5, color="gray", linestyle="--", label="High creatinine cutoff (1.5)")
+    plt.yscale("log")  # log scale so a few extreme values don't squash the boxes
+    plt.yticks([0.5, 1, 1.5, 2, 3, 5, 10], ["0.5", "1", "1.5", "2", "3", "5", "10"])
+    plt.title("Serum Creatinine by Outcome")
+    plt.xlabel("Outcome")
+    plt.ylabel("Serum Creatinine (mg/dL, log scale)")
+    plt.legend()
+    plt.gca()
     return
 
 
