@@ -13,7 +13,7 @@
 
 import marimo
 
-__generated_with = "0.25.0"
+__generated_with = "0.25.1"
 app = marimo.App(width="medium")
 
 
@@ -34,7 +34,7 @@ def _(mo):
     mo.md(r"""
     # Heart Failure: Ejection Fraction and Kidney Function
 
-    **Group members:** Edgar Ocasio-Arce, Cristobal Gonzalez and Robinson D. Willie
+    **Group members:** Edgar Ocasio-Arce, Cristobal Gonzalez and Willie Robinson
 
     **GitHub:** https://github.com/edjavi120/heart-failure-analysis
 
